@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityConnect - Municipal Complaint Portal</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            color: #111827;
+            line-height: 1.5;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .nav-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .menu-icon {
+            cursor: pointer;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            position: relative;
+            margin-right: 10px;
+        }
+        
+        .menu-icon .bar {
+            height: 3px;
+            width: 24px;
+            background-color: white;
+            position: absolute;
+            left: 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-icon .bar:nth-child(1) {
+            top: 6px;
+        }
+        
+        .menu-icon .bar:nth-child(2) {
+            top: 14px;
+        }
+        
+        .menu-icon .bar:nth-child(3) {
+            top: 22px;
+        }
+        
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 250px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0;
+            top: 100%;
+            left: 0;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        
+        .dropdown-menu a {
+            color: var(--gray-800) !important;
+            padding: 0.75rem 1rem;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .dropdown-menu a:hover {
+            background-color: var(--gray-100);
+            text-decoration: none !important;
+        }
+        
+        .profile-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .profile-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            font-size: 1.875rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+        
+        .category-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .complaints-list {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .complaint-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .complaint-item:last-child {
+            border-bottom: none;
+        }
+        
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .complaint-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        .complaint-category {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .complaint-description {
+            margin-bottom: 1rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .status-inprogress {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .status-resolved {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .complaint-response {
+            background-color: var(--gray-100);
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .complaint-response-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .complaint-response-date {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        footer {
+            background-color: var(--gray-800);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .footer-column {
+            flex: 1;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-600);
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: var(--gray-300);
+        }
+        
+        /* Added toolbar positioning */
+        .header-toolbar {
+            position: relative;
+            width: 100%;
+        }
+        
+        .toolbar-dropdown {
+            position: absolute;
+            left: 0;
+        }
+        
+        .logo {
+            margin-left: 40px;
+        }
+        
+        /* SVG icons styling */
+        .svg-icon {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-toolbar flex justify-between items-center">
+                <!-- Moved dropdown menu to extreme left -->
+                <div class="toolbar-dropdown dropdown">
+                    <div class="menu-icon">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="#">Municipal Alerts & Notices</a>
+                        <a href="#">Community Forum</a>
+                        <a href="#">Civic Complaints & Requests</a>
+                        <a href="#">Household Services</a>
+                        <a href="#">Report</a>
+                        <a href="#">Pollution Report</a>
+                    </div>
+                </div>
+                <div class="logo">
+                    <h1>CityConnect</h1>
+                </div>
+                <nav class="nav-links">
+                    <!-- Updated home icon to SVG -->
+                    <a href="#" class="active">
+                        <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Home
+                    </a>
+                    <!-- "Submit Complaint" link has been removed -->
+                </nav>
+                <div>
+                    <!-- Updated profile icon to SVG -->
+                    <button class="profile-btn">
+                        <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('submit')">Submit Complaint</div>
+            <div class="tab" onclick="switchTab('track')">Track Complaints</div>
+        </div>
+
+        <div id="submit" class="tab-content active">
+            <h2>Choose Complaint Category</h2>
+            <div class="grid">
+                <div class="category-card" onclick="selectCategory('water')">
+                    <div class="category-icon">💧</div>
+                    <div class="category-name">Water Supply</div>
+                    <div class="category-description">Issues with water supply, quality, or leakage</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('road')">
+                    <div class="category-icon">🛣️</div>
+                    <div class="category-name">Roads & Footpaths</div>
+                    <div class="category-description">Potholes, damaged pavements, or broken streetlights</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('garbage')">
+                    <div class="category-icon">🗑️</div>
+                    <div class="category-name">Garbage Collection</div>
+                    <div class="category-description">Missed collection, overflow, or improper disposal</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('sewage')">
+                    <div class="category-icon">🚱</div>
+                    <div class="category-name">Sewage & Drainage</div>
+                    <div class="category-description">Blockages, overflow, or malfunction</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('electric')">
+                    <div class="category-icon">💡</div>
+                    <div class="category-name">Electricity</div>
+                    <div class="category-description">Power outages, damaged wires, or electrical hazards</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('pollution')">
+                    <div class="category-icon">🌫️</div>
+                    <div class="category-name">Pollution Report</div>
+                    <div class="category-description">Air, water, noise pollution, or environmental hazards</div>
+                </div>
+                <div class="category-card" onclick="selectCategory('other')">
+                    <div class="category-icon">📋</div>
+                    <div class="category-name">Other Issues</div>
+                    <div class="category-description">Any other municipal concerns not listed above</div>
+                </div>
+            </div>
+
+            <div id="complaint-form" class="form-container" style="display: none;">
+                <h2 id="form-title">Submit Complaint</h2>
+                <form id="complaint-submission-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address/Location of Issue</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="water">Water Supply</option>
+                            <option value="road">Roads & Footpaths</option>
+                            <option value="garbage">Garbage Collection</option>
+                            <option value="sewage">Sewage & Drainage</option>
+                            <option value="electric">Electricity</option>
+                            <option value="pollution">Pollution Report</option>
+                            <option value="other">Other Issues</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Complaint Subject</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Complaint Description</label>
+                        <textarea id="description" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo">Upload Photo (Optional)</label>
+                        <input type="file" id="photo" name="photo" accept="image/*">
+                    </div>
+                    <button type="button" class="btn" onclick="submitComplaint()">Submit Complaint</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="track" class="tab-content">
+            <h2>Track Your Complaints</h2>
+            <div class="form-container" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label for="complaint-id">Complaint ID</label>
+                    <input type="text" id="complaint-id" placeholder="Enter your complaint ID">
+                </div>
+                <button class="btn" onclick="searchComplaint()">Search</button>
+            </div>
+
+            <div class="complaints-list">
+                <div class="complaint-item">
+                    <div class="complaint-header">
+                        <div>
+                            <div class="complaint-title">Water leakage on Main Street</div>
+                            <div class="complaint-category">Category: Water Supply</div>
+                        </div>
+                        <div class="status-badge status-inprogress">In Progress</div>
+                    </div>
+                    <div class="complaint-description">
+                        There is a major water leakage near the intersection of Main Street and 5th Avenue. The water has been flowing for 3 days and is causing damage to the road.
+                    </div>
+                    <div>
+                        <strong>Complaint ID:</strong> WTR-2025032301
+                        <br>
+                        <strong>Submitted:</strong> March 20, 2025
+                    </div>
+                    <div class="complaint-response">
+                        <div class="complaint-response-header">
+                            <div>Municipal Response</div>
+                            <div class="complaint-response-date">March 21, 2025</div>
+                        </div>
+                        <p>
+                            Thank you for reporting this issue. Our water department has inspected the site and identified a broken underground pipe. Repair work has been scheduled for March 24, 2025. The issue is expected to be resolved within 48 hours after work begins.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="complaint-item">
+                    <div class="complaint-header">
+                        <div>
+                            <div class="complaint-title">Pothole on Oak Avenue</div>
+                            <div class="complaint-category">Category: Roads & Footpaths</div>
+                        </div>
+                        <div class="status-badge status-resolved">Resolved</div>
+                    </div>
+                    <div class="complaint-description">
+                        There is a large pothole on Oak Avenue near house number 42 that is causing damage to vehicles and is a safety hazard.
+                    </div>
+                    <div>
+                        <strong>Complaint ID:</strong> RDS-2025031501
+                        <br>
+                        <strong>Submitted:</strong> March 15, 2025
+                    </div>
+                    <div class="complaint-response">
+                        <div class="complaint-response-header">
+                            <div>Municipal Response</div>
+                            <div class="complaint-response-date">March 16, 2025</div>
+                        </div>
+                        <p>
+                            Thank you for bringing this to our attention. Our roads department has inspected the site and scheduled repairs for March 18, 2025.
+                        </p>
+                    </div>
+                    <div class="complaint-response">
+                        <div class="complaint-response-header">
+                            <div>Municipal Response</div>
+                            <div class="complaint-response-date">March 19, 2025</div>
+                        </div>
+                        <p>
+                            We are pleased to inform you that the pothole on Oak Avenue has been repaired. Thank you for your patience and for helping us improve our city infrastructure.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="complaint-item">
+                    <div class="complaint-header">
+                        <div>
+                            <div class="complaint-title">Garbage not collected on Pine Street</div>
+                            <div class="complaint-category">Category: Garbage Collection</div>
+                        </div>
+                        <div class="status-badge status-pending">Pending</div>
+                    </div>
+                    <div class="complaint-description">
+                        The garbage on Pine Street has not been collected for the last two scheduled pickups. Bins are overflowing and causing bad odor in the neighborhood.
+                    </div>
+                    <div>
+                        <strong>Complaint ID:</strong> GRB-2025032201
+                        <br>
+                        <strong>Submitted:</strong> March 22, 2025
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>About CityConnect</h3>
+                    <p>
+                        A platform connecting citizens with their municipal corporation to resolve local issues efficiently and transparently.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Submit Complaint</a></li>
+                        <li><a href="#">Profile</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Information</h3>
+                    <ul class="footer-links">
+                        <li>City Hall, Main Street</li>
+                        <li>Phone: (123) 456-7890</li>
+                        <li>Email: support@cityconnect.gov</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 CityConnect - Municipal Complaint Management System. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update tab styling
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Set active tab
+            event.currentTarget.classList.add('active');
+        }
+        
+        function selectCategory(category) {
+            // Show complaint form
+            document.getElementById('complaint-form').style.display = 'block';
+            
+            // Set category in dropdown
+            document.getElementById('category').value = category;
+            
+            // Set form title based on category
+            const categoryNames = {
+                'water': 'Water Supply',
+                'road': 'Roads & Footpaths',
+                'garbage': 'Garbage Collection',
+                'sewage': 'Sewage & Drainage',
+                'electric': 'Electricity',
+                'pollution': 'Pollution Report',
+                'other': 'Other Issues'
+            };
+            
+            document.getElementById('form-title').textContent = `Submit Complaint: ${categoryNames[category]}`;
+            
+            // Scroll to form
+            document.getElementById('complaint-form').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function submitComplaint() {
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const category = document.getElementById('category').value;
+            const subject = document.getElementById('subject').value;
+            const description = document.getElementById('description').value;
+            
+            // Validate form
+            if (!name || !email || !phone || !address || !category || !subject || !description) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // In a real application, you would send this data to your server
+            // For demo purposes, we'll show a success message
+            alert('Thank you! Your complaint has been submitted successfully.\n\nComplaint ID: ' + generateComplaintId(category));
+            
+            // Reset form
+            document.getElementById('complaint-submission-form').reset();
+            document.getElementById('complaint-form').style.display = 'none';
+            
+            // Switch to track tab
+            switchTab('track');
+        }
+        
+        function generateComplaintId(category) {
+            // Generate a random complaint ID based on category
+            const categories = {
+                'water': 'WTR',
+                'road': 'RDS',
+                'garbage': 'GRB',
+                'sewage': 'SWG',
+                'electric': 'ELC',
+                'pollution': 'PLT',
+                'other': 'OTH'
+            };
+            
+            const prefix = categories[category] || 'CMP';
+            const date = new Date().toISOString().slice(2, 10).replace(/-/g, '');
+            const random = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+            
+            return `${prefix}-${date}${random}`;
+        }
+        
+        function searchComplaint() {
+            const complaintId = document.getElementById('complaint-id').value;
+            
+            if (!complaintId) {
+                alert('Please enter a complaint ID.');
+                return;
+            }
+            
+            // In a real application, you would search your database for the complaint
+            // For demo purposes, we'll show a message
+            alert('Searching for complaint ID: ' + complaintId + '\n\nThis functionality would be implemented with a backend database in a real application.');
+        }
+    </script>
+</body>
+</html>

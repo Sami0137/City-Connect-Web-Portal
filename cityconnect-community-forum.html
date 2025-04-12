@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityConnect - Community Forum</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            color: #111827;
+            line-height: 1.5;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .nav-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .menu-icon {
+            cursor: pointer;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            position: relative;
+            margin-right: 10px;
+        }
+        
+        .menu-icon .bar {
+            height: 3px;
+            width: 24px;
+            background-color: white;
+            position: absolute;
+            left: 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-icon .bar:nth-child(1) {
+            top: 6px;
+        }
+        
+        .menu-icon .bar:nth-child(2) {
+            top: 14px;
+        }
+        
+        .menu-icon .bar:nth-child(3) {
+            top: 22px;
+        }
+        
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 250px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0;
+            top: 100%;
+            left: 0;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        
+        .dropdown-menu a {
+            color: var(--gray-800) !important;
+            padding: 0.75rem 1rem;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .dropdown-menu a:hover {
+            background-color: var(--gray-100);
+            text-decoration: none !important;
+        }
+        
+        .profile-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .profile-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            font-size: 1.875rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+        
+        /* Added toolbar positioning */
+        .header-toolbar {
+            position: relative;
+            width: 100%;
+        }
+        
+        .toolbar-dropdown {
+            position: absolute;
+            left: 0;
+        }
+        
+        .logo {
+            margin-left: 40px;
+        }
+        
+        /* SVG icons styling */
+        .svg-icon {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            margin-right: 8px;
+        }
+        
+        /* Forum specific styles */
+        .forum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+        
+        .forum-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .forum-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 1.25rem;
+        }
+        
+        .icon-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .message-date {
+            padding: 0.5rem 0;
+            margin: 1.5rem 0 0.5rem 0;
+            font-weight: 600;
+            color: var(--gray-600);
+            position: relative;
+        }
+        
+        .message-date:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--gray-300);
+        }
+        
+        .message-container {
+            margin-bottom: 1.5rem;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+        
+        .message {
+            display: flex;
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .message-content {
+            flex: 1;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-sender {
+            font-weight: 600;
+        }
+        
+        .message-time {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .message-body {
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 1rem;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+        
+        .message-action {
+            cursor: pointer;
+        }
+        
+        .message-action:hover {
+            color: var(--primary);
+        }
+        
+        .notice {
+            border-left: 4px solid var(--warning);
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+        
+        .alert {
+            border-left: 4px solid var(--danger);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        
+        .attachment {
+            display: flex;
+            align-items: center;
+            background-color: var(--gray-100);
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .attachment-icon {
+            margin-right: 0.5rem;
+            color: var(--gray-600);
+        }
+        
+        .message-input {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .input-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .input-field {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 1.5rem;
+            font-size: 1rem;
+            resize: none;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .input-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .input-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: none;
+            font-size: 1.25rem;
+        }
+        
+        .input-icon:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .attachment-icon {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .attachment-icon:hover {
+            background-color: var(--gray-100);
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-300);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--gray-600);
+        }
+        
+        .modal-body {
+            padding: 1rem;
+        }
+        
+        .modal-form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .modal-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .modal-input, .modal-textarea, .modal-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+        
+        .modal-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .modal-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--gray-300);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--gray-800);
+            border: 1px solid var(--gray-300);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--gray-100);
+        }
+        
+        /* Notifications panel */
+        .notifications-panel {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 1rem;
+            background-color: white;
+            width: 350px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+        }
+        
+        .notifications-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-300);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notifications-title {
+            font-weight: 600;
+        }
+        
+        .notifications-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .notification {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .notification:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .notification-content {
+            margin-bottom: 0.5rem;
+        }
+        
+        .notification-time {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .notification-settings {
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid var(--gray-300);
+        }
+        
+        .notification-settings a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .notification-settings a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Added bottom padding to account for fixed input bar */
+        .content-padding {
+            padding-bottom: 100px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .message-container {
+                max-height: 400px;
+            }
+            
+            .icon-btn {
+                width: 36px;
+                height: 36px;
+            }
+        }
+        
+        footer {
+            display: none; /* Hide footer to make room for input bar */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-toolbar flex justify-between items-center">
+                <!-- Moved dropdown menu to extreme left -->
+                <div class="toolbar-dropdown dropdown">
+                    <div class="menu-icon">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="#">Municipal Alerts & Notices</a>
+                        <a href="#">Community Forum</a>
+                        <a href="#">Civic Complaints & Requests</a>
+                        <a href="#">Household Services</a>
+                        <a href="#">Report</a>
+                        <a href="#">Pollution Report</a>
+                    </div>
+                </div>
+                <div class="logo">
+                    <h1>CityConnect</h1>
+                </div>
+                <nav class="nav-links">
+                    <!-- Updated home icon to SVG -->
+                    <a href="#">
+                        <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Home
+                    </a>
+                </nav>
+                <div>
+                    <!-- Updated profile icon to SVG -->
+                    <button class="profile-btn">
+                        <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container content-padding">
+        <div class="forum-header">
+            <h1 class="forum-title">Community Forum</h1>
+            <div class="forum-actions">
+                <button class="icon-btn" id="notifications-btn" title="Alerts & Notifications">
+                    <span>🔔</span>
+                </button>
+                <button class="icon-btn" id="new-notice-btn" title="Submit a Notice">
+                    <span>✏️</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="message-container" id="message-feed">
+            <div class="message-date">March 23, 2025</div>
+            
+            <!-- Notice Message -->
+            <div class="message">
+                <div class="message-avatar">JR</div>
+                <div class="message-content notice">
+                    <div class="message-header">
+                        <div class="message-sender">John Roberts</div>
+                        <div class="message-time">10:45 AM</div>
+                    </div>
+                    <div class="message-body">
+                        <strong>NOTICE:</strong> We will be hosting a block party next Saturday (March 29th) from 4PM to 8PM on Maple Avenue. Everyone is welcome! Please bring a dish to share if possible. There will be games for kids and live music.
+                    </div>
+                    <div class="message-actions">
+                        <div class="message-action">Like</div>
+                        <div class="message-action">Reply</div>
+                        <div class="message-action">Share</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Regular Message -->
+            <div class="message">
+                <div class="message-avatar">SM</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="message-sender">Sarah Miller</div>
+                        <div class="message-time">9:30 AM</div>
+                    </div>
+                    <div class="message-body">
+                        Has anyone else noticed the new construction on Oak Street? Does anyone know what's being built there?
+                    </div>
+                    <div class="message-actions">
+                        <div class="message-action">Like</div>
+                        <div class="message-action">Reply</div>
+                        <div class="message-action">Share</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reply Message -->
+            <div class="message" style="margin-left: 50px;">
+                <div class="message-avatar">TJ</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="message-sender">Tom Jackson</div>
+                        <div class="message-time">9:42 AM</div>
+                    </div>
+                    <div class="message-body">
+                        I heard it's going to be a new community center with a library and recreational facilities.
+                    </div>
+                    <div class="message-actions">
+                        <div class="message-action">Like</div>
+                        <div class="message-action">Reply</div>
+                        <div class="message-action">Share</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="message-date">March 22, 2025</div>
+            
+            <!-- Alert Message -->
+            <div class="message">
+                <div class="message-avatar">LP</div>
+                <div class="message-content alert">
+                    <div class="message-header">
+                        <div class="message-sender">Lisa Parker</div>
+                        <div class="message-time">3:15 PM</div>
+                    </div>
+                    <div class="message-body">
+                        <strong>ALERT:</strong> Lost dog in the Cedar Hills neighborhood. Brown Labrador, answers to "Max". Last seen near the park. Please call 555-123-4567 if found.
+                    </div>
+                    <div class="attachment">
+                        <span class="attachment-icon">📎</span>
+                        <span>dog_photo.jpg</span>
+                    </div>
+                    <div class="message-actions">
+                        <div class="message-action">Like</div>
+                        <div class="message-action">Reply</div>
+                        <div class="message-action">Share</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Message with Image -->
+            <div class="message">
+                <div class="message-avatar">RD</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="message-sender">Robert Davis</div>
+                        <div class="message-time">2:30 PM</div>
+                    </div>
+                    <div class="message-body">
+                        The pothole on Elm Street has gotten bigger after yesterday's rain. Can we get the city to fix this soon? It's becoming a hazard.
+                    </div>
+                    <div class="attachment">
+                        <span class="attachment-icon">📎</span>
+                        <span>pothole_photo.jpg</span>
+                    </div>
+                    <div class="message-actions">
+                        <div class="message-action">Like</div>
+                        <div class="message-action">Reply</div>
+                        <div class="message-action">Share</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="message">
+                <div class="message-avatar">AM</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="message-sender">Alice Morris</div>
+                        <div class="message-time">11:15 AM</div>
+                    </div>
+                    <div class="message-body">
+                        Anyone interested in starting a weekend community garden project? I think the vacant lot next to the elementary school would be perfect. Let me know if you'd like to get involved!
+                    </div>
+                    <div class="message-actions">
+                        <div class="message-action">Like</div>
+                        <div class="message-action">Reply</div>
+                        <div class="message-action">Share</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Fixed message input at bottom -->
+    <div class="message-input">
+        <div class="input-container">
+            <input type="text" class="input-field" id="message-input" placeholder="Type your message here...">
+            <div class="input-actions">
+                <button class="input-icon attachment-icon" title="Add Attachment">
+                    <span>+</span>
+                </button>
+                <button class="input-icon attachment-icon" title="Take Photo">
+                    <span>📷</span>
+                </button>
+                <button class="input-icon" id="send-message-btn" title="Send Message">
+                    <span>➤</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notifications-panel">
+        <div class="notifications-header">
+            <div class="notifications-title">Alerts & Notifications</div>
+            <button class="modal-close" id="close-notifications">×</button>
+        </div>
+        <div class="notifications-list">
+            <div class="notification">
+                <div class="notification-content">
+                    <strong>ALERT:</strong> Road closure on Main Street due to water main repair. Please use alternate routes.
+                </div>
+                <div class="notification-time">Today, 8:15 AM</div>
+            </div>
+            <div class="notification">
+                <div class="notification-content">
+                    <strong>ALERT:</strong> Power outage reported in the North district. Crews are working to restore power.
+                </div>
+                <div class="notification-time">Yesterday, 10:30 PM</div>
+            </div>
+            <div class="notification">
+                <div class="notification-content">
+                    <strong>NOTICE:</strong> Upcoming town hall meeting on April 5th at the Community Center.
+                </div>
+                <div class="notification-time">March 21, 2025</div>
+            </div>
+            <div class="notification">
+                <div class="notification-content">
+                    <strong>ALERT:</strong> Lost cat in Riverside neighborhood. Orange tabby wearing a blue collar.
+                </div>
+                <div class="notification-time">March 20, 2025</div>
+            </div>
+        </div>
+        <div class="notification-settings">
+            <a href="#">Manage notification settings</a>
+        </div>
+    </div>
+
+    <!-- New Notice Modal -->
+    <div class="modal" id="notice-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Submit a Notice</div>
+                <button class="modal-close" id="close-notice-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-form-group">
+                    <label class="modal-label" for="notice-type">Notice Type</label>
+                    <select class="modal-select" id="notice-type">
+                        <option value="general">General Notice</option>
+                        <option value="event">Event Notice</option>
+                        <option value="alert">Alert</option>
+                        <option value="lost">Lost & Found</option>
+                    </select>
+                </div>
+                <div class="modal-form-group">
+                    <label class="modal-label" for="notice-title">Title</label>
+                    <input type="text" class="modal-input" id="notice-title" placeholder="Enter notice title">
+                </div>
+                <div class="modal-form-group">
+                    <label class="modal-label" for="notice-content">Content</label>
+                    <textarea class="modal-textarea" id="notice-content" placeholder="Enter notice details..."></textarea>
+                </div>
+                <div class="modal-form-group">
+                    <label class="modal-label" for="notice-attachment">Attachments (Optional)</label>
+                    <input type="file" id="notice-attachment">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-notice">Cancel</button>
+                <button class="btn" id="submit-notice">Submit Notice</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const notificationsBtn = document.getElementById('notifications-btn');
+        const notificationsPanel = document.getElementById('notifications-panel');
+        const closeNotifications = document.getElementById('close-notifications');
+        const newNoticeBtn = document.getElementById('new-notice-btn');
+        const noticeModal = document.getElementById('notice-modal');
+        const closeNoticeModal = document.getElementById('close-notice-modal');
+        const cancelNotice = document.getElementById('cancel-notice');
+        const submitNotice = document.getElementById('submit-notice');
+        const messageFeed = document.getElementById('message-feed');
+        const messageInput = document.getElementById('message-input');
+        const sendMessageBtn = document.getElementById('send-message-btn');
+        
+        // Toggle notifications panel
+        notificationsBtn.addEventListener('click', function() {
+            notificationsPanel.style.display = notificationsPanel.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        closeNotifications.addEventListener('click', function() {
+            notificationsPanel.style.display = 'none';
+        });
+        // Add alert sending functionality to the notifications bell button
+        notificationsBtn.addEventListener('dblclick', function() {
+        // Show the notice modal but pre-select "Alert" type
+        noticeModal.style.display = 'flex';
+        document.getElementById('notice-type').value = 'alert';
+        document.getElementById('notice-title').focus();
+        });
+
+        // Add tooltip to inform users about the double-click functionality
+        notificationsBtn.title = "Alerts & Notifications (Single click to view, double click to create new alert)";
+        
+        
+        // Complete the click event listener that was cut off
+        document.addEventListener('click', function(event) {
+            if (!notificationsPanel.contains(event.target) && event.target !== notificationsBtn) {
+                notificationsPanel.style.display = 'none';
+            }
+        });
+        
+        // Open notice modal
+        newNoticeBtn.addEventListener('click', function() {
+            noticeModal.style.display = 'flex';
+        });
+        
+        // Close notice modal
+        closeNoticeModal.addEventListener('click', function() {
+            noticeModal.style.display = 'none';
+        });
+        
+        cancelNotice.addEventListener('click', function() {
+            noticeModal.style.display = 'none';
+        });
+        
+        // Submit notice functionality
+        submitNotice.addEventListener('click', function() {
+            const noticeType = document.getElementById('notice-type').value;
+            const noticeTitle = document.getElementById('notice-title').value;
+            const noticeContent = document.getElementById('notice-content').value;
+            
+            if (!noticeTitle || !noticeContent) {
+                alert('Please fill out all required fields');
+                return;
+            }
+            
+            // Create new message
+            createNewMessage(noticeTitle, noticeContent, noticeType);
+            
+            // Reset and close modal
+            document.getElementById('notice-type').value = 'general';
+            document.getElementById('notice-title').value = '';
+            document.getElementById('notice-content').value = '';
+            document.getElementById('notice-attachment').value = '';
+            noticeModal.style.display = 'none';
+        });
+        
+        // Send message functionality
+        sendMessageBtn.addEventListener('click', function() {
+            sendMessage();
+        });
+        
+        // Allow Enter key to send message
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Function to send a message
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            
+            if (messageText) {
+                // Create new general message
+                createNewMessage('', messageText, 'general');
+                
+                // Clear input
+                messageInput.value = '';
+            }
+        }
+        
+        // Function to create a new message in the feed
+        function createNewMessage(title, content, type) {
+            // Get current date and time
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            const timeString = `${formattedHours}:${minutes} ${ampm}`;
+            
+            // Check if we need to add a new date header
+            const today = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            let dateHeader = messageFeed.querySelector('.message-date:first-child');
+            
+            if (!dateHeader || dateHeader.textContent !== today) {
+                dateHeader = document.createElement('div');
+                dateHeader.className = 'message-date';
+                dateHeader.textContent = today;
+                messageFeed.prepend(dateHeader);
+            }
+            
+            // Create message elements
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            
+            // Create avatar with user initials
+            const userName = 'Current User'; // This would be dynamic in a real app
+            const initials = userName.split(' ').map(n => n[0]).join('');
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.textContent = initials;
+            
+            // Create message content container
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            // Add special styling based on type
+            if (type === 'alert') {
+                contentDiv.classList.add('alert');
+            } else if (type === 'event' || type === 'lost' || type === 'notice') {
+                contentDiv.classList.add('notice');
+            }
+            
+            // Create message header
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'message-header';
+            
+            const senderDiv = document.createElement('div');
+            senderDiv.className = 'message-sender';
+            senderDiv.textContent = userName;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = timeString;
+            
+            headerDiv.appendChild(senderDiv);
+            headerDiv.appendChild(timeDiv);
+            
+            // Create message body
+            const bodyDiv = document.createElement('div');
+            bodyDiv.className = 'message-body';
+            
+            // Format content based on type
+            if (type === 'alert') {
+                bodyDiv.innerHTML = `<strong>ALERT:</strong> ${title ? title + ': ' : ''}${content}`;
+            } else if (type === 'event') {
+                bodyDiv.innerHTML = `<strong>EVENT:</strong> ${title ? title + ': ' : ''}${content}`;
+            } else if (type === 'lost') {
+                bodyDiv.innerHTML = `<strong>LOST & FOUND:</strong> ${title ? title + ': ' : ''}${content}`;
+            } else if (type === 'notice') {
+                bodyDiv.innerHTML = `<strong>NOTICE:</strong> ${title ? title + ': ' : ''}${content}`;
+            } else {
+                bodyDiv.textContent = content;
+            }
+            
+            // Create message actions
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'message-actions';
+            actionsDiv.innerHTML = `
+                <div class="message-action">Like</div>
+                <div class="message-action">Reply</div>
+                <div class="message-action">Share</div>
+            `;
+            
+            // Assemble message
+            contentDiv.appendChild(headerDiv);
+            contentDiv.appendChild(bodyDiv);
+            contentDiv.appendChild(actionsDiv);
+            
+            messageDiv.appendChild(avatarDiv);
+            messageDiv.appendChild(contentDiv);
+            
+            // Add message after date header
+            dateHeader.insertAdjacentElement('afterend', messageDiv);
+            
+            // Scroll to new message
+            messageDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Add event listeners to message actions
+        messageFeed.addEventListener('click', function(e) {
+            if (e.target.classList.contains('message-action')) {
+                const action = e.target.textContent;
+                const messageEl = e.target.closest('.message');
+                const sender = messageEl.querySelector('.message-sender').textContent;
+                
+                if (action === 'Like') {
+                    // Handle like functionality
+                    e.target.textContent = 'Liked';
+                    e.target.style.color = 'var(--primary)';
+                } else if (action === 'Reply') {
+                    // Set input focus and add @username
+                    messageInput.value = `@${sender} `;
+                    messageInput.focus();
+                } else if (action === 'Share') {
+                    // Handle share functionality (could open a share modal)
+                    alert('Share feature coming soon!');
+                }
+            }
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === noticeModal) {
+                noticeModal.style.display = 'none';
+            }
+        });
+        
+        // Initialize with a welcome message if feed is empty
+        if (messageFeed.querySelectorAll('.message').length === 0) {
+            createNewMessage('Welcome to the Community Forum', 'This is a place to share important information, discuss community matters, and connect with your neighbors.', 'notice');
+        }
+    </script>
+</body>
+</html>

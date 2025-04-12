@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityConnect - Household Services</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            
+            /* Priority colors */
+            --priority-high: #ef4444;
+            --priority-medium: #f59e0b;
+            --priority-low: #10b981;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            color: #111827;
+            line-height: 1.5;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .nav-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .menu-icon {
+            cursor: pointer;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            position: relative;
+            margin-right: 10px;
+        }
+        
+        .menu-icon .bar {
+            height: 3px;
+            width: 24px;
+            background-color: white;
+            position: absolute;
+            left: 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-icon .bar:nth-child(1) {
+            top: 6px;
+        }
+        
+        .menu-icon .bar:nth-child(2) {
+            top: 14px;
+        }
+        
+        .menu-icon .bar:nth-child(3) {
+            top: 22px;
+        }
+        
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 250px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0;
+            top: 100%;
+            left: 0;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        
+        .dropdown-menu a {
+            color: var(--gray-800) !important;
+            padding: 0.75rem 1rem;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .dropdown-menu a:hover {
+            background-color: var(--gray-100);
+            text-decoration: none !important;
+        }
+        
+        .profile-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .profile-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Added toolbar positioning */
+        .header-toolbar {
+            position: relative;
+            width: 100%;
+        }
+        
+        .toolbar-dropdown {
+            position: absolute;
+            left: 0;
+        }
+        
+        .logo {
+            margin-left: 40px;
+        }
+        
+        /* SVG icons styling */
+        .svg-icon {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            margin-right: 8px;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            font-size: 1.875rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-800);
+        }
+
+        /* Household Services specific styles */
+        .services-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .service-selection {
+            margin-bottom: 2rem;
+        }
+        
+        .service-selection h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        .service-name {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .provider-section {
+            margin-top: 2rem;
+        }
+        
+        .provider-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .provider-table th {
+            background-color: var(--gray-100);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-800);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .provider-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: middle;
+        }
+        
+        .provider-row {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .provider-row:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .provider-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .provider-name {
+            font-weight: 500;
+        }
+        
+        .provider-rating {
+            display: flex;
+            align-items: center;
+        }
+        
+        .star-icon {
+            color: var(--warning);
+            margin-right: 0.25rem;
+        }
+        
+        .provider-details {
+            display: none;
+            padding: 1.5rem;
+            background-color: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                max-height: 0;
+                opacity: 0;
+            }
+            to {
+                max-height: 500px;
+                opacity: 1;
+            }
+        }
+        
+        .detail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .detail-col {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .detail-item {
+            margin-bottom: 1rem;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--gray-600);
+        }
+        
+        .detail-value {
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+        
+        .availability-slots {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        
+        .time-slot {
+            padding: 0.5rem 0.75rem;
+            background-color: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .time-slot:hover {
+            border-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .time-slot.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .time-slot.unavailable {
+            opacity: 0.5;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        
+        .booking-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #0da271;
+        }
+        
+        .booking-history {
+            margin-top: 3rem;
+        }
+        
+        .no-bookings {
+            padding: 2rem;
+            text-align: center;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .booking-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .booking-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        .booking-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .status-progress {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .status-canceled {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .booking-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .booking-info-col {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .booking-detail {
+            margin-bottom: 0.5rem;
+        }
+        
+        .booking-label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--gray-600);
+        }
+        
+        .booking-value {
+            color: var(--gray-800);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+        
+        .modal-title {
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .modal-content {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--gray-200);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* Footer styles */
+        footer {
+            background-color: var(--gray-800);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .footer-column {
+            flex: 1;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-600);
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: var(--gray-300);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .detail-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .booking-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-toolbar flex justify-between items-center">
+                <!-- Moved dropdown menu to extreme left -->
+                <div class="toolbar-dropdown dropdown">
+                    <div class="menu-icon">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="#">Municipal Alerts & Notices</a>
+                        <a href="#">Community Forum</a>
+                        <a href="#">Civic Complaints & Requests</a>
+                        <a href="#">Household Services</a>
+                        <a href="#">Report</a>
+                        <a href="#">Pollution Report</a>
+                    </div>
+                </div>
+                <div class="logo">
+                    <h1>CityConnect</h1>
+                </div>
+                <nav class="nav-links">
+                    <!-- Home icon with SVG -->
+                    <a href="#">
+                        <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Home
+                    </a>
+                </nav>
+                <div>
+                    <!-- Profile button with SVG -->
+                    <button class="profile-btn">
+                        <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="services-header">
+            <h1>Household Services</h1>
+        </div>
+
+        <!-- Service Selection Section -->
+        <section class="service-selection">
+            <h2>Select a Service</h2>
+            <div class="service-grid">
+                <div class="service-card" data-service="carpentry">
+                    <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                    <div class="service-name">Carpentry</div>
+                </div>
+                <div class="service-card" data-service="electrician">
+                    <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                    </svg>
+                    <div class="service-name">Electrician</div>
+                </div>
+                <div class="service-card" data-service="plumbing">
+                    <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 3v3a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V3"></path>
+                        <line x1="12" y1="19" x2="12" y2="15"></line>
+                        <path d="M4 15h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z"></path>
+                        <polyline points="16 7 16 13 8 13 8 7"></polyline>
+                    </svg>
+                    <div class="service-name">Plumbing</div>
+                </div>
+                <div class="service-card" data-service="ac-repair">
+                    <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"></path>
+                        <line x1="2" y1="20" x2="2.01" y2="20"></line>
+                    </svg>
+                    <div class="service-name">AC Repair</div>
+                </div>
+                <div class="service-card" data-service="pest-control">
+                    <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
+                    </svg>
+                    <div class="service-name">Pest Control</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Provider Listing Section -->
+        <section class="provider-section" id="providers-list" style="display: none;">
+            <h2>Available Service Providers</h2>
+            <table class="provider-table">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Rating</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="provider-row" data-provider-id="1">
+                        <td>
+                            <img src="/api/placeholder/40/40" alt="Provider" class="provider-img">
+                        </td>
+                        <td class="provider-name">John Smith</td>
+                        <td class="provider-rating">
+                            <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                            4.8/5
+                        </td>
+                        <td>North District</td>
+                    </tr>
+                    <tr class="provider-details" id="provider-details-1">
+                        <td colspan="4">
+                            <div class="detail-container">
+                                <div class="detail-col">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Base Fee</span>
+                                        <span class="detail-value">$50</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Experience</span>
+                                        <span class="detail-value">8 years</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Contact</span>
+                                        <span class="detail-value">Contact details visible after booking</span>
+                                    </div>
+                                </div>
+                                <div class="detail-col">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Availability</span>
+                                        <div class="availability-slots">
+                                            <div class="time-slot" data-slot="morning">Morning (8AM - 12PM)</div>
+                                            <div class="time-slot unavailable" data-slot="afternoon">Afternoon (1PM - 5PM)</div>
+                                            <div class="time-slot" data-slot="evening">Evening (6PM - 9PM)</div>
+                                        </div>
+                                    </div>
+                                    <div class="booking-actions">
+                                        <button class="btn book-service" disabled>Book Service</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr class="provider-row" data-provider-id="2">
+                        <td>
+                            <img src="/api/placeholder/40/40" alt="Provider" class="provider-img">
+                        </td>
+                        <td class="provider-name">Emily Johnson</td>
+                        <td class="provider-rating">
+                            <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                            4.5/5
+                        </td>
+                        <td>South District</td>
+                    </tr>
+                    <tr class="provider-details" id="provider-details-2">
+                        <td colspan="4">
+                            <div class="detail-container">
+                                <div class="detail-col">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Base Fee</span>
+                                        <span class="detail-value">$45</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Experience</span>
+                                        <span class="detail-value">6 years</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Contact</span>
+                                        <span class="detail-value">Contact details visible after booking</span>
+                                    </div>
+                                </div>
+                                <div class="detail-col">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Availability</span>
+                                        <div class="availability-slots">
+                                            <div class="time-slot unavailable" data-slot="morning">Morning (8AM - 12PM)</div>
+                                            <div class="time-slot" data-slot="afternoon">Afternoon (1PM - 5PM)</div>
+                                            <div class="time-slot" data-slot="evening">Evening (6PM - 9PM)</div>
+                                        </div>
+                                    </div>
+                                    <div class="booking-actions">
+                                        <button class="btn book-service" disabled>Book Service</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr class="provider-row" data-provider-id="3">
+                        <td>
+                            <img src="/api/placeholder/40/40" alt="Provider" class="provider-img">
+                        </td>
+                        <td class="provider-name">Michael Rodriguez</td>
+                        <td class="provider-rating">
+                            <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                            4.7/5
+                        </td>
+                        <td>East District</td>
+                    </tr>
+                    <tr class="provider-details" id="provider-details-3">
+                        <td colspan="4">
+                            <div class="detail-container">
+                                <div class="detail-col">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Base Fee</span>
+                                        <span class="detail-value">$55</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Experience</span>
+                                        <span class="detail-value">10 years</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Contact</span>
+                                        <span class="detail-value">Contact details visible after booking</span>
+                                    </div>
+                                </div>
+                                <div class="detail-col">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Availability</span>
+                                        <div class="availability-slots">
+                                            <div class="time-slot" data-slot="morning">Morning (8AM - 12PM)</div>
+                                            <div class="time-slot" data-slot="afternoon">Afternoon (1PM - 5PM)</div>
+                                            <div class="time-slot unavailable" data-slot="evening">Evening (6PM - 9PM)</div>
+                                        </div>
+                                    </div>
+                                    <div class="booking-actions">
+                                        <button class="btn book-service" disabled>Book Service</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Booking History Section -->
+        <section class="booking-history">
+            <h2>Your Booking History</h2>
+            <div class="no-bookings" id="no-bookings">
+                <p>You have no previous bookings. Select a service to get started.</p>
+            </div>
+            
+            <div id="booking-list" style="display: none;">
+                <!-- Sample booking cards will be inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="modal-overlay" id="booking-modal">
+        <div class="modal">
+            <button class="modal-close" id="close-modal">&times;</button>
+            <h2 class="modal-title">Confirm Service Booking</h2>
+            <div class="modal-content">
+                <div class="detail-item">
+                    <span class="detail-label">Service Type</span>
+                    <span class="detail-value" id="modal-service-type">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Service Provider</span>
+                    <span class="detail-value" id="modal-provider-name">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Time Slot</span>
+                    <span class="detail-value" id="modal-time-slot">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Base Fee</span>
+                    <span class="detail-value" id="modal-base-fee">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Your Address</span>
+                    <div>
+                        <textarea id="user-address" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: 0.25rem; margin-top: 0.5rem;" placeholder="Please enter your address"></textarea>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Your Contact Number</span>
+                    <div>
+                        <input type="tel" id="user-phone" style="width: 100%; padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: 0.25rem; margin-top: 0.5rem;" placeholder="Please enter your contact number">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancel-booking">Cancel</button>
+                <button class="btn btn-success" id="confirm-booking">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal">
+            <button class="modal-close" id="close-success-modal">&times;</button>
+            <h2 class="modal-title">Booking Successful!</h2>
+            <div class="modal-content">
+                <p>Your service booking has been confirmed. The service provider will contact you shortly.</p>
+                
+                <div class="detail-item" style="margin-top: 1rem;">
+                    <span class="detail-label">Booking Reference</span>
+                    <span class="detail-value" id="booking-reference">-</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Provider Contact</span>
+                    <span class="detail-value" id="provider-contact">-</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" id="close-success">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>About CityConnect</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Mission</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Municipal Alerts</a></li>
+                        <li><a href="#">Community Forum</a></li>
+                        <li><a href="#">Civic Complaints</a></li>
+                        <li><a href="#">Household Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Support Email</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Report an Issue</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 CityConnect. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables to store state
+        let selectedService = null;
+        let selectedProvider = null;
+        let selectedTimeSlot = null;
+        
+        // Initialize page when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup event listeners for service cards
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    serviceCards.forEach(c => c.classList.remove('selected'));
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    // Store the selected service
+                    selectedService = this.getAttribute('data-service');
+                    // Show the providers section
+                    document.getElementById('providers-list').style.display = 'block';
+                    // Reset any previous selections
+                    resetProviderSelection();
+                });
+            });
+            
+            // Setup event listeners for provider rows
+            const providerRows = document.querySelectorAll('.provider-row');
+            providerRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    const providerId = this.getAttribute('data-provider-id');
+                    const detailsRow = document.getElementById(`provider-details-${providerId}`);
+                    
+                    // Toggle the details row visibility
+                    if (detailsRow.style.display === 'table-row') {
+                        detailsRow.style.display = 'none';
+                        selectedProvider = null;
+                    } else {
+                        // Hide all details rows first
+                        document.querySelectorAll('.provider-details').forEach(dr => {
+                            dr.style.display = 'none';
+                        });
+                        // Show the clicked one
+                        detailsRow.style.display = 'table-row';
+                        selectedProvider = {
+                            id: providerId,
+                            name: this.querySelector('.provider-name').textContent,
+                            baseFee: detailsRow.querySelector('.detail-value').textContent
+                        };
+                    }
+                });
+            });
+            
+            // Setup event listeners for time slots
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => {
+                if (!slot.classList.contains('unavailable')) {
+                    slot.addEventListener('click', function() {
+                        // Get parent provider details row
+                        const detailsRow = this.closest('.provider-details');
+                        
+                        // Remove selected class from all time slots in this provider row
+                        detailsRow.querySelectorAll('.time-slot').forEach(s => {
+                            s.classList.remove('selected');
+                        });
+                        
+                        // Add selected class to clicked time slot
+                        this.classList.add('selected');
+                        
+                        // Store the selected time slot
+                        selectedTimeSlot = this.getAttribute('data-slot');
+                        
+                        // Enable the book service button
+                        detailsRow.querySelector('.book-service').disabled = false;
+                    });
+                }
+            });
+            
+            // Setup event listeners for booking buttons
+            const bookButtons = document.querySelectorAll('.book-service');
+            bookButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (selectedService && selectedProvider && selectedTimeSlot) {
+                        // Show the booking modal
+                        openBookingModal();
+                    }
+                });
+            });
+            
+            // Modal close button
+            document.getElementById('close-modal').addEventListener('click', function() {
+                document.getElementById('booking-modal').style.display = 'none';
+            });
+            
+            // Cancel booking button
+            document.getElementById('cancel-booking').addEventListener('click', function() {
+                document.getElementById('booking-modal').style.display = 'none';
+            });
+            
+            // Confirm booking button
+            document.getElementById('confirm-booking').addEventListener('click', function() {
+                // Get address and phone number
+                const address = document.getElementById('user-address').value;
+                const phone = document.getElementById('user-phone').value;
+                
+                // Validate inputs
+                if (!address || !phone) {
+                    alert('Please enter both your address and phone number.');
+                    return;
+                }
+                
+                // Process the booking
+                processBooking(address, phone);
+            });
+            
+            // Success modal close button
+            document.getElementById('close-success-modal').addEventListener('click', function() {
+                document.getElementById('success-modal').style.display = 'none';
+            });
+            
+            // Success modal done button
+            document.getElementById('close-success').addEventListener('click', function() {
+                document.getElementById('success-modal').style.display = 'none';
+                // Refresh the booking history
+                refreshBookingHistory();
+            });
+        });
+        
+        // Function to open the booking modal
+        function openBookingModal() {
+            // Set the modal content based on selections
+            document.getElementById('modal-service-type').textContent = capitalizeFirstLetter(selectedService);
+            document.getElementById('modal-provider-name').textContent = selectedProvider.name;
+            document.getElementById('modal-time-slot').textContent = getTimeSlotText(selectedTimeSlot);
+            document.getElementById('modal-base-fee').textContent = selectedProvider.baseFee;
+            
+            // Show the modal
+            document.getElementById('booking-modal').style.display = 'flex';
+        }
+        
+        // Function to process the booking
+        function processBooking(address, phone) {
+            // In a real app, this would make an API call to create the booking
+            
+            // For demo purposes, we'll just simulate a successful booking
+            // Generate a random booking reference
+            const bookingRef = 'BK' + Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
+            
+            // Set the success modal content
+            document.getElementById('booking-reference').textContent = bookingRef;
+            document.getElementById('provider-contact').textContent = generateFakePhoneNumber();
+            
+            // Hide the booking modal
+            document.getElementById('booking-modal').style.display = 'none';
+            
+            // Show the success modal
+            document.getElementById('success-modal').style.display = 'flex';
+            
+            // Add the booking to storage (for history)
+            addBookingToHistory(bookingRef, address, phone);
+        }
+        
+        // Function to add a booking to history
+        function addBookingToHistory(bookingRef, address, phone) {
+            // In a real app, this would be stored in a database
+            // For demo purposes, we'll use localStorage
+            
+            const booking = {
+                reference: bookingRef,
+                service: selectedService,
+                providerName: selectedProvider.name,
+                providerId: selectedProvider.id,
+                timeSlot: selectedTimeSlot,
+                address: address,
+                phone: phone,
+                status: 'progress',
+                date: new Date().toISOString()
+            };
+            
+            // Get existing bookings from localStorage or initialize empty array
+            let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            
+            // Add the new booking
+            bookings.push(booking);
+            
+            // Save back to localStorage
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+        }
+        
+        // Function to refresh the booking history display
+        function refreshBookingHistory() {
+            const bookingList = document.getElementById('booking-list');
+            const noBookings = document.getElementById('no-bookings');
+            
+            // Get bookings from localStorage
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            
+            if (bookings.length > 0) {
+                // Clear the booking list
+                bookingList.innerHTML = '';
+                
+                // Sort bookings by date (newest first)
+                bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Create booking cards for each booking
+                bookings.forEach(booking => {
+                    const card = createBookingCard(booking);
+                    bookingList.appendChild(card);
+                });
+                
+                // Show the booking list and hide the no bookings message
+                bookingList.style.display = 'block';
+                noBookings.style.display = 'none';
+            } else {
+                // Show the no bookings message and hide the booking list
+                bookingList.style.display = 'none';
+                noBookings.style.display = 'block';
+            }
+        }
+        
+        // Function to create a booking card
+        function createBookingCard(booking) {
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+            
+            const statusClass = `status-${booking.status}`;
+            const statusText = booking.status === 'progress' ? 'In Progress' : 
+                                booking.status === 'completed' ? 'Completed' : 'Canceled';
+            
+            const dateFormatted = new Date(booking.date).toLocaleDateString();
+            
+            card.innerHTML = `
+                <div class="booking-header">
+                    <div class="booking-title">${capitalizeFirstLetter(booking.service)} Service</div>
+                    <div class="booking-status ${statusClass}">${statusText}</div>
+                </div>
+                <div class="booking-info">
+                    <div class="booking-info-col">
+                        <div class="booking-detail">
+                            <span class="booking-label">Booking Reference</span>
+                            <span class="booking-value">${booking.reference}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="booking-label">Service Provider</span>
+                            <span class="booking-value">${booking.providerName}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="booking-label">Date Booked</span>
+                            <span class="booking-value">${dateFormatted}</span>
+                        </div>
+                    </div>
+                    <div class="booking-info-col">
+                        <div class="booking-detail">
+                            <span class="booking-label">Time Slot</span>
+                            <span class="booking-value">${getTimeSlotText(booking.timeSlot)}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="booking-label">Address</span>
+                            <span class="booking-value">${booking.address}</span>
+                        </div>
+                        <div class="booking-detail">
+                            <span class="booking-label">Contact</span>
+                            <span class="booking-value">${booking.phone}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Helper function to reset provider selection
+        function resetProviderSelection() {
+            // Hide all provider details rows
+            document.querySelectorAll('.provider-details').forEach(row => {
+                row.style.display = 'none';
+            });
+            
+            // Disable all book service buttons
+            document.querySelectorAll('.book-service').forEach(button => {
+                button.disabled = true;
+            });
+            
+            // Deselect all time slots
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            
+            // Reset selection variables
+            selectedProvider = null;
+            selectedTimeSlot = null;
+        }
+        
+        // Helper function to capitalize the first letter of a string
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        // Helper function to get the text representation of a time slot
+        function getTimeSlotText(slot) {
+            switch(slot) {
+                case 'morning':
+                    return 'Morning (8AM - 12PM)';
+                case 'afternoon':
+                    return 'Afternoon (1PM - 5PM)';
+                case 'evening':
+                    return 'Evening (6PM - 9PM)';
+                default:
+                    return 'Unknown';
+            }
+        }
+        
+        // Helper function to generate a fake phone number for demo purposes
+        function generateFakePhoneNumber() {
+            return '+1 (555) ' + Math.floor(Math.random() * 900 + 100) + '-' + Math.floor(Math.random() * 9000 + 1000);
+        }
+        
+        // Load booking history on page load
+        window.onload = function() {
+            refreshBookingHistory();
+        };
+    </script>
+</body>
+</html>
